@@ -1,0 +1,40 @@
+[versions]
+kotlin = "1.9.20"
+android-gradle-plugin = "7.3.1"
+compose-compiler = "1.5.3"
+android-compose-version = "1.5.4"
+compose-multiplatform = "1.5.11"
+agp = "8.2.0"
+
+[libraries]
+jetpack-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "android-gradle-plugin" }
+jetpack-compose-foundation = {  module = "androidx.compose.foundation:foundation", version.ref = "android-compose-version" }
+jetpack-compose-material3 = { module = "androidx.compose.material3:material3", version.require = "1.1.2" }
+jetpack-compose-icons = { module = "androidx.compose.material:material-icons-core", version.ref = "android-compose-version" }
+jetpack-compose-extendedIcons = { module = "androidx.compose.material:material-icons-extended", version.ref = "android-compose-version" }
+jetpack-compose-activity = { module = "androidx.activity:activity-compose", version.ref = "android-compose-version" }
+jetpack-compose-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "android-compose-version" }
+
+accompanist-systemUiController = { module = "com.google.accompanist:accompanist-systemuicontroller", version.require = "0.32.0" }
+
+kotlin-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+android-plugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
+vanniktech-maven-publish = { module = "com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin", version.require = "0.25.3" }
+
+
+[plugins]
+# Compiler plugins
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+# Kotlin
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-js = { id = "org.jetbrains.kotlin.js", version.ref = "kotlin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
+# Android
+android-library = { id = "com.android.library", version.ref = "agp" }
+android-application = { id = "com.android.library", version.ref = "agp" }
+
+# Other
+compose = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
