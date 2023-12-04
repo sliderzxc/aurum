@@ -11,20 +11,20 @@ kotlin {
 
     androidTarget()
     jvm()
-    js()
+    js {
+        browser()
+        nodejs()
+    }
 
     sourceSets {
         val commonMain by getting
-        val commonTest by getting
-
         val jvmMain by getting
-        val jvmTest by getting
-
-        val jsMain by getting
-        val jsTest by getting
-
+        val jsMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlin:kotlin-stdlib-js:1.9.21")
+            }
+        }
         val androidMain by getting
-        val androidUnitTest by getting
     }
 }
 
