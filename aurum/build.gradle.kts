@@ -11,7 +11,7 @@ kotlin {
 
     androidTarget()
     jvm()
-    js {
+    js(IR) {
         browser()
         nodejs()
     }
