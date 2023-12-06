@@ -1,9 +1,11 @@
 package com.sliderzxc.aurum
 
 import android.util.Log
+import it.czerwinski.kotlin.util.Option
+import org.kodein.di.DI
 
-public actual object Aurum {
-    public actual fun d(tag: String, message: String) {
+actual object Aurum {
+    actual fun d(tag: String, message: String) {
         Log.d(tag, message)
     }
 }

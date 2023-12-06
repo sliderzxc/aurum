@@ -1,30 +1,42 @@
-import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
+import com.sliderzxc.gradle.multiplatform.bundle.bundle
+import com.sliderzxc.gradle.multiplatform.platforms.Platform
+import com.sliderzxc.gradle.multiplatform.setupMultiplatform
+import com.sliderzxc.gradle.multiplatform.setupSourceSets
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
+    id("com.sliderzxc.gradle.setup")
 }
 
+setupMultiplatform(
+    Platform.Android,
+    Platform.Jvm,
+    Platform.Js
+)
+
 kotlin {
-    explicitApi = ExplicitApiMode.Strict
-    jvmToolchain(11)
+    setupSourceSets {
+        val android by bundle()
+        val jvm by bundle()
+        val js by bundle()
+        val common by bundle()
 
-    androidTarget()
-    jvm()
-    js(IR) {
-        browser()
-        nodejs()
-    }
-
-    sourceSets {
-        val commonMain by getting
-        val jvmMain by getting
-        val jsMain by getting {
-            dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-js:1.9.21")
-            }
+        android.main.dependencies {
+            implementation("org.kodein.di:kodein-di:7.19.0")
         }
-        val androidMain by getting
+
+        jvm.main.dependencies {
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
+        }
+
+        js.main.dependencies {
+            implementation("app.softwork:kotlinx-uuid-core:0.0.22")
+        }
+
+        common.main.dependencies {
+            implementation("it.czerwinski:kotlin-util:1.9.1")
+        }
     }
 }
 

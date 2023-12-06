@@ -1,5 +1,7 @@
 package com.sliderzxc.aurum
 
-public expect object Aurum {
-    public fun d(tag: String, message: String)
+import it.czerwinski.kotlin.util.Option
+
+expect object Aurum {
+    fun d(tag: String, message: String)
 }

@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.library) apply false
     id("org.jetbrains.kotlinx.kover") version "0.6.1"
     id("org.jetbrains.dokka") version "1.9.10"
+    alias(libs.plugins.kotlin.jvm) apply false
 }
 
 allprojects {
