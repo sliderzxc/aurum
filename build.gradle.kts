@@ -1,91 +1,60 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.sliderzxc.gradle.android.config.AndroidConfig
+import com.sliderzxc.gradle.defaults.setupDefaults
+import com.sliderzxc.gradle.multiplatform.config.MultiplatformConfig
+import com.sliderzxc.gradle.multiplatform.platforms.Platform
+import com.sliderzxc.gradle.publishing.config.DeveloperConfig
+import com.sliderzxc.gradle.publishing.config.LibraryConfig
+import com.sliderzxc.gradle.publishing.config.PublishingConfig
+import com.sliderzxc.gradle.publishing.platforms.multiplatform.applySigningPlugin
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
     id("org.jetbrains.kotlinx.kover") version "0.6.1"
     id("org.jetbrains.dokka") version "1.9.10"
-    alias(libs.plugins.kotlin.jvm) apply false
+    id("com.sliderzxc.gradle.setup")
 }
 
-allprojects {
-    group = "com.sliderzxc.aurum"
-    version = "1.0.1"
-
-    apply(plugin = "org.jetbrains.kotlinx.kover")
-    apply(plugin = "org.jetbrains.dokka")
-    apply(plugin = "maven-publish")
-    apply(plugin = "signing")
-
-    extensions.configure<PublishingExtension> {
-        repositories {
-            maven {
-                val isSnapshot = version.toString().endsWith("SNAPSHOT")
-                url = uri(
-                    if (!isSnapshot) "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
-                    else "https://s01.oss.sonatype.org/content/repositories/snapshots"
-                )
-
-                credentials {
-                    username = gradleLocalProperties(rootDir).getProperty("sonatypeUsername")
-                    password = gradleLocalProperties(rootDir).getProperty("sonatypePassword")
-                }
-            }
-        }
-
-        val javadocJar = tasks.register<Jar>("javadocJar") {
-            dependsOn(tasks.dokkaHtml)
-            archiveClassifier.set("javadoc")
-            from("$buildDir/dokka")
-        }
-
-        publications {
-            withType<MavenPublication> {
-                artifact(javadocJar)
-                pom {
-                    name.set("aurum")
-                    description.set("Kotlin Multiplatform Library for Logging")
-                    url.set("https://github.com/sliderzxc/aurum")
-                    licenses {
-                        license {
-                            name.set("GPL-3.0-only license")
-                            url.set("https://opensource.org/license/gpl-3-0/")
-                        }
-                    }
-                    issueManagement {
-                        system.set("Github")
-                        url.set("https://github.com/sliderzxc/aurum/issues")
-                    }
-                    scm {
-                        connection.set("https://github.com/sliderzxc/aurum.git")
-                        url.set("https://github.com/sliderzxc/aurum")
-                    }
-                    developers {
-                        developer {
-                            name.set("Vadym Hrynyk")
-                            email.set("sliderzxc@gmail.com")
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    val publishing = extensions.getByType<PublishingExtension>()
-    extensions.configure<SigningExtension> {
-        useInMemoryPgpKeys(
-            "secret key",
-            gradleLocalProperties(rootDir).getProperty("gpgKeyPassword"),
+setupDefaults(
+    MultiplatformConfig(
+        setOf(
+            Platform.Android,
+            Platform.Jvm,
+            Platform.Js
         )
-
-        sign(publishing.publications)
-    }
-
-    // TODO: remove after https://youtrack.jetbrains.com/issue/KT-46466 is fixed
-    project.tasks.withType(AbstractPublishToMaven::class.java).configureEach {
-        dependsOn(project.tasks.withType(Sign::class.java))
-    }
-}
+    ),
+    AndroidConfig(
+        minSdkVersion = 21,
+        compileSdkVersion = 34,
+        targetSdkVersion = 34,
+        namespace = "com.sliderzxc.aurum.test"
+    ),
+    PublishingConfig(
+        LibraryConfig(
+            group = "com.sliderzxc.aurum",
+            version = "1.0.3",
+            name = "aurum",
+            description = "Kotlin Multiplatform Library for Logging",
+            url = "https://github.com/sliderzxc/aurum",
+            scmUrl = "https://github.com/sliderzxc/aurum.git",
+            releaseRepository = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2",
+            snapshotRepository = "https://s01.oss.sonatype.org/content/repositories/snapshots",
+            licenseName = "GPL-3.0-only license",
+            licenseUrl = "https://opensource.org/license/gpl-3-0/",
+            signingKey = gradleLocalProperties(rootDir).getProperty("gpgKeySecret"),
+            signingPassword = gradleLocalProperties(rootDir).getProperty("gpgKeyPassword"),
+        ),
+        DeveloperConfig(
+            id = "sliderzxc",
+            name = "Vadym Hrynyk",
+            email  = "sliderzxc@gmail.com",
+            username = gradleLocalProperties(rootDir).getProperty("sonatypeUsername"),
+            password = gradleLocalProperties(rootDir).getProperty("sonatypePassword")
+        )
+    )
+)
 
 koverMerged {
     enable()

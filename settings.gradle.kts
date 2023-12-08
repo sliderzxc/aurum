@@ -9,7 +9,7 @@ pluginManagement {
     resolutionStrategy {
         eachPlugin {
             if (requested.id.toString() == "com.sliderzxc.gradle.setup") {
-                val version = "1.0.0"
+                val version = "1.2.1"
                 useModule("com.github.sliderzxc:gradle-setup-plugin:$version")
             }
         }

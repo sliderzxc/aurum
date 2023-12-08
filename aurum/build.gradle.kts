@@ -1,7 +1,7 @@
 import com.sliderzxc.gradle.multiplatform.bundle.bundle
-import com.sliderzxc.gradle.multiplatform.platforms.Platform
 import com.sliderzxc.gradle.multiplatform.setupMultiplatform
 import com.sliderzxc.gradle.multiplatform.setupSourceSets
+import com.sliderzxc.gradle.publishing.setupPublishing
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -9,11 +9,8 @@ plugins {
     id("com.sliderzxc.gradle.setup")
 }
 
-setupMultiplatform(
-    Platform.Android,
-    Platform.Jvm,
-    Platform.Js
-)
+setupMultiplatform()
+setupPublishing()
 
 kotlin {
     setupSourceSets {
@@ -37,18 +34,5 @@ kotlin {
         common.main.dependencies {
             implementation("it.czerwinski:kotlin-util:1.9.1")
         }
-    }
-}
-
-android {
-    namespace = "com.sliderzxc.aurum.android"
-    compileSdk = 34
-
-    defaultConfig {
-        minSdk = 21
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
     }
 }
