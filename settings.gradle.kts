@@ -31,4 +31,4 @@ dependencyResolutionManagement {
 rootProject.name = "aurum"
 
 include(":aurum")
-include(":test")
+include(":extension-android")
